@@ -161,7 +161,9 @@ function make_clickable( $tweet ){
 }
 
  function set_twitter_transient($key, $data, $expiration){
-     set_transient( $key, array( $expiration, $data ) );
+	//Time when transient expires
+	$expire = time() + $expiration;
+     set_transient( $key, array( $expire, $data ) );
  }
 
 function get_tweets($args){
@@ -190,10 +192,10 @@ function get_tweets($args){
 
     } else {
         // Soft expiration. $transient = array( expiration time, data)
-        if ( $transient[0] !== 0 && $transient[0] >= time() ){
+        if ( $transient[0] !== 0 && $transient[0] <= time() ){
 
             //Expiration time passed, attempt to get new data
-            $new_data = $this->retrieve_remote_tweets( $args );
+            $new_data = $this->retrieve_remote_tweets( $request_url  );
 
             if( !is_wp_error($new_data) ){
                 //If successful return update transient and new data
