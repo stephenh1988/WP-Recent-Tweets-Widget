@@ -15,7 +15,7 @@ class WP_Widget_Wptuts_Twitter_Widget extends WP_Widget {
 function __construct() {
     $widget_ops = array(
         'classname' => 'wptuts_widget_twitter',
-        'description' => __('Displays a calendar of your events','wptuts_twitter')
+        'description' => __('Displays a list of recent tweets','wptuts_twitter')
     );
     parent::__construct('WP_Widget_Wptuts_Twitter', __('Twitter','wptuts_twitter'), $widget_ops);
 
@@ -60,8 +60,8 @@ function update( $new_instance=array(), $old_instance=array() ) {
         </p
 >
         <p>
-            <label for="<?php echo $this->get_field_id('username'); ?>"><?php _e('Twitter username', 'wptuts_twitter'); ?>: </label>
-            <input id="<?php echo $this->get_field_id('username'); ?>" name="<?php echo $this->get_field_name('username'); ?>" type="text" value="<?php echo esc_attr($username);?>" />
+            <label for="<?php echo $this->get_field_id('screen_name'); ?>"><?php _e('Twitter username', 'wptuts_twitter'); ?>: </label>
+            <input id="<?php echo $this->get_field_id('screen_name'); ?>" name="<?php echo $this->get_field_name('screen_name'); ?>" type="text" value="<?php echo esc_attr($screen_name);?>" />
         </p>
 
         <p>
@@ -92,6 +92,7 @@ function generate_tweet_list( $args=array() ){
 
     $content = '<ul>';
     if ( is_wp_error($tweets) || !is_array($tweets) || count($tweets) ==0 ) {
+
         $content .= '<li>' . __( 'No Tweets Available', 'wptuts_twitter' ) . '</li>';
 
     } else {
@@ -176,6 +177,7 @@ function get_tweets($args){
     $expiration = 60*60; 
 
     $transient = get_transient( $key );
+
     if ( false === $transient ) {
         // Hard expiration
         $data = $this->retrieve_remote_tweets( $request_url );
